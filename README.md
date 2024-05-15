@@ -14,3 +14,6 @@ REST APIs to create, read, update, delete addresses from an address book. | Pyth
 - [ ] create CRUD APIs
 - [ ] push to Github
 - [ ] deply to Oracle Cloud
+
+## how to run the application
+pending
