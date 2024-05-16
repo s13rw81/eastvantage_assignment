@@ -14,9 +14,14 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread
 BASE = declarative_base()
 
 WS_LOG_PATH = os.path.join(os.path.curdir, "logs")  # '.\\logs'
+if not os.path.exists(WS_LOG_PATH):
+    os.makedirs(WS_LOG_PATH)
+    print(f"Directory '{WS_LOG_PATH}' created successfully.")
+else:
+    print(f"Directory '{WS_LOG_PATH}' already exists.")
 
 # logging
-log = logging.getLogger("foliox_logger")
+log = logging.getLogger("eastvantage_logger")
 log.setLevel(logging.DEBUG)
 logFormatter = logging.Formatter('%(asctime)s - %(filename)s > %(funcName)s() # %(lineno)d [%(levelname)s] %(message)s')
 DATE_FORMAT = "%Y-%m-%d"

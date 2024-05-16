@@ -32,8 +32,11 @@ async def startup_event():
 
 
 # homepage
-@app.get("/")
+@app.get("/", description="This is the root API endpoint. It returns a welcome message.")
 async def root():
+    """
+    This is the root API endpoint. It returns a welcome message.
+    """
     log.info(f'inside index route')
     msg = "Eastvantage Fast API assignment. Kindly navigate to  the {}/docs to use the API"
     if ENVIRONMENT == 'dev':
@@ -43,28 +46,71 @@ async def root():
 
 
 # User APIs
-@app.post("/add_user/", response_model=User)
+@app.post("/add_user/", response_model=User, description='add a new user to the database.')
 def add_user(user: UserCreate, db=Depends(get_db)):
+    """
+    add a new user to the database
+    input:
+    - **first_name**: The first name of the user.
+    - **last_name**: The last name of the user.
+    - **phone**: The phone number of the user.
+    - **username**: The username of the user.
+    - **email**: The email address of the user.
+    - **password**: The password for the user.
+    output:
+    The function will return the details of the newly created user.
+    """
     log.info('inside add user route')
     return create_user(user, db=db)
 
 
-@app.delete("/remove_user/", response_model=User)
+@app.delete("/remove_user/", response_model=User, description='remove a user from the database.')
 async def remove_user(user_id: int, db=Depends(get_db)):
+    """
+    Remove a user from the database.
+    input
+    - **user_id**: The ID of the user to be removed.
+
+    The function will return the details of the removed user.
+    """
     log.info('inside delete user route')
     return delete_user(user_id, db=db)
 
 
 # add a new address
-@app.post("/add_address/", response_model=address_schemas.Address)
+@app.post("/add_address/", response_model=address_schemas.Address, description="Add a new address to the database.")
 async def create_address(address: address_schemas.AddressCreate):
+    """
+    Add a new address to the database.
+    input:
+    - **resident_name**: The resident's name (optional).
+    - **house_number**: The house number (optional).
+    - **street_number**: The street number (optional).
+    - **city**: The city.
+    - **state**: The state.
+    - **country**: The country.
+    - **zipcode**: The zipcode.
+    - **latitude**: The latitude.
+    - **longitude**: The longitude.
+    - **added_by**: The ID of the user who added the address.
+    output:
+    The function will return the details of the newly created address.
+    """
     log.info('inside create add route')
     return address_crud.create_address(address=address)
 
 
 # update an address
-@app.put("/update_address/", response_model=address_schemas.Address)
+@app.put("/update_address/", response_model=address_schemas.Address, description='update an existing address in the database.')
 def update_address(changed_address: address_schemas.AddressEdit, db: Session = Depends(get_db)):
+    """
+    Update an existing address in the database.
+    input:
+    - **changed_address**: The updated address details.
+    - **db**: The database session.
+    output:
+    The function will return the details of the updated address. If the address is not found or does not belong to the user, it will raise an HTTP 404 error.
+    """
     log.info('inside update address route')
     address_id = changed_address.address_id
     user_id = changed_address.user_id
@@ -76,8 +122,9 @@ def update_address(changed_address: address_schemas.AddressEdit, db: Session = D
 
 
 # delete an address
-@app.delete("/delete_address/{address_id}", response_model=address_schemas.Address)
+@app.delete("/delete_address/{address_id}", response_model=address_schemas.Address, description='remove an address from the database.')
 def delete_address(address_id: int, user_id: int, db: Session = Depends(get_db)):
+    
     log.info('inside delete address route')
     db_address = address_crud.get_address(address_id=address_id, db=db, user_id=user_id)
     if db_address is None:
