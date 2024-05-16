@@ -1,6 +1,10 @@
 # Eastvantage Assignment
 
-REST APIs to create, read, update, delete addresses from an address book. | Python | Fast API | Pydantic | SQLite3 | SQLALchemy | pytest
+REST APIs to create, read, update, delete addresses from an address book.
+
+## Tools and Technologies
+
+Python | Fast API | Pydantic | SQLite3 | SQLALchemy | pytest
 
 
 ## TODOs
