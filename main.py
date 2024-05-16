@@ -141,8 +141,19 @@ async def read_address(address_id: int, user_id: int):
     return db_address
 
 
-@app.get("/get_addresses_within_distance/", response_model=List[AddressInDB])
+@app.get("/get_addresses_within_distance/", response_model=List[AddressInDB], description='return a list of address belongint to user_id which are withing the specified distance of the latitude and longitude mentioned.')
 def get_addresses(latitude: float, longitude: float, user_id: int, distance: float, db=Depends(get_db)):
+    """
+    This function returns a list of addresses within a specified distance from a given latitude and longitude.
+    input:
+    latitude (float): The latitude of the user's location.
+    longitude (float): The longitude of the user's location.
+    user_id (int): The ID of the user.
+    distance (float): The distance within which to find addresses.
+    db (Session, optional): The database session. Defaults to Depends(get_db).
+    output:
+    List[AddressInDB]: A list of addresses within the specified distance.
+    """
     log.info('inside get_addresses_within_distance route')
     user_coordinates = (latitude, longitude)
     addresses = db.query(Address).filter(Address.added_by == user_id).all()
