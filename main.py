@@ -141,7 +141,7 @@ async def read_address(address_id: int, user_id: int):
     return db_address
 
 
-@app.get("/get_addresses_within_distance/", response_model=List[AddressInDB], description='return a list of address belongint to user_id which are withing the specified distance of the latitude and longitude mentioned.')
+@app.get("/get_addresses_within_distance/", response_model=List[AddressInDB], description='return a list of address belonging to user_id which are withing the specified distance of the latitude and longitude mentioned.')
 def get_addresses(latitude: float, longitude: float, user_id: int, distance: float, db=Depends(get_db)):
     """
     This function returns a list of addresses within a specified distance from a given latitude and longitude.
