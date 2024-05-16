@@ -1,4 +1,7 @@
+import logging
 import os
+import sys
+from datetime import datetime
 
 from fastapi.exceptions import HTTPException
 from sqlalchemy import create_engine
@@ -10,14 +13,22 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 BASE = declarative_base()
 
+WS_LOG_PATH = os.path.join(os.path.curdir, "logs")  # '.\\logs'
 
-def get_db():
-    db = Session(engine)
-    try:
-        yield db
-    finally:
-        db.close()
+# logging
+log = logging.getLogger("foliox_logger")
+log.setLevel(logging.DEBUG)
+logFormatter = logging.Formatter('%(asctime)s - %(filename)s > %(funcName)s() # %(lineno)d [%(levelname)s] %(message)s')
+DATE_FORMAT = "%Y-%m-%d"
+TODAY = datetime.now().strftime(DATE_FORMAT)
+LOG_FILE = os.path.join(WS_LOG_PATH, f"{TODAY}_logs.log")  # '.\\2023_03_11_10_18_logs.log'
+consoleHandler = logging.StreamHandler(stream=sys.stderr)
+consoleHandler.setFormatter(logFormatter)
+log.addHandler(consoleHandler)
 
+fileHandler = logging.FileHandler(LOG_FILE)  # '.\\logs/.\\2023_03_11_10_18_logs.log'
+fileHandler.setFormatter(logFormatter)
+log.addHandler(fileHandler)
 
 # ENVIRONMENT VARIABLES
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'DEV').lower()
@@ -25,6 +36,17 @@ ENVIRONMENT = os.environ.get('ENVIRONMENT', 'DEV').lower()
 # EXCEPTIONS
 NOTIMPLEMENTEDERROR = HTTPException(status_code=404, detail="this route has not been implemented yet.")
 DATABASEERROR = HTTPException(status_code=500, detail="error creating database entry")
+
+
+def get_db():
+    db = Session(engine)
+    try:
+        yield db
+    except Exception as e:
+        log.error(str(e))
+    finally:
+        db.close()
+
 
 RANDOM_USERS = [
     {

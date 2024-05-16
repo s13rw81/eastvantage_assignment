@@ -1,5 +1,7 @@
 # address_book/crud.py
-from config import get_db, DATABASEERROR
+import logging
+
+from config import get_db, DATABASEERROR, log
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -15,6 +17,7 @@ def get_address(address_id: int, user_id: int, db: Session = None):
 
 
 def create_address(address: schemas.AddressCreate, db: Session = None):
+    log.info(f'adding new address {address}')
     if db is None:
         db = next(get_db())
     db_address = models.Address(**address.dict())

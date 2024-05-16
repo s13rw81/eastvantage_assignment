@@ -16,4 +16,8 @@ class User(BASE):
     password = Column(String)
     addresses = relationship("Address", back_populates="user")
 
+    def __str__(self):
+        return f"<User: id: {self.id} name = {self.first_name} + " " + {self.last_name} email: {self.email}>"
 
+    def __repr__(self):
+        return self.__str__()

@@ -1,4 +1,4 @@
-from config import get_db
+from config import get_db, log
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -8,6 +8,7 @@ from user_management import schemas
 
 
 def create_user(user: schemas.UserCreate, db: Session = None):
+    log.info(f"user schema = {user}")
     if db is None:
         db = next(get_db())
     if isinstance(user, dict):
@@ -18,7 +19,9 @@ def create_user(user: schemas.UserCreate, db: Session = None):
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
+        log.info(f'create user succeeded. new user is {db_user}')
     except IntegrityError as e:
+        log.error(f'error creating user {e}')
         db.rollback()
         raise HTTPException(status_code=409, detail=str(e))
     db.close()
@@ -26,9 +29,11 @@ def create_user(user: schemas.UserCreate, db: Session = None):
 
 
 def delete_user(user_id: int, db: Session = None) -> JSONResponse:
+    log.info(f'delete user {user_id}')
     if db is None:
         db = next(get_db())
     user = db.query(models.User).filter(models.User.id == user_id).first()
+    log.info(f'user found : {user}')
     if user:
         try:
             db.delete(user)
@@ -37,6 +42,8 @@ def delete_user(user_id: int, db: Session = None) -> JSONResponse:
             db.rollback()
             raise HTTPException(status_code=409, detail=str(e))
     else:
+        log.error(f'user with {user_id} not found')
         raise HTTPException(status_code=404, detail='user not found.')
     db.close()
+    log.info(f'user with id {user_id} deleted.')
     return JSONResponse(status_code=410, content={'message': 'user deleted successfully'})
