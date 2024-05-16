@@ -1,11 +1,10 @@
 # user_management/models.py
+from config import BASE
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from sqlalchemy.orm import relationship
 
 
-class User(Base):
+class User(BASE):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -15,3 +14,6 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     password = Column(String)
+    addresses = relationship("Address", back_populates="user")
+
+

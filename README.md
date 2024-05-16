@@ -4,16 +4,27 @@ REST APIs to create, read, update, delete addresses from an address book. | Pyth
 
 
 ## TODOs
-- [ ] create virtual enviromnent
-- [ ] create Fast API project
-- [ ] create pydantic models
-- [ ] create SQLALchemy models
-- [ ] create the login log out logic
-- [ ] create user model
-- [ ] create logging logic
-- [ ] create CRUD APIs
-- [ ] push to Github
+- [X] create virtual enviromnent
+- [X] create Fast API project
+- [X] create pydantic models
+- [X] create SQLALchemy models
+- [X] create user model
+- [X] create CRUD APIs
+- [X] push to Github
+- [ ] add logging
+- [ ] add documentation
+- [ ] add unit tests
 - [ ] deply to Oracle Cloud
 
 ## how to run the application
-pending
+create virtual environment using `python -m pip venv eastvantage_assignment`
+
+activate the `virtual environment` using `Scripts\activate`
+
+clone the repository from https://github.com/s13rw81/eastvantage_assignment.git
+
+install the required libraries using `pip install -r requirements.txt`
+
+run the app using `uvicorn main:app --port 80`
+
+navigate to the OPEN API docs which is at `http://localhot/docs`
