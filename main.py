@@ -124,7 +124,7 @@ def update_address(changed_address: address_schemas.AddressEdit, db: Session = D
 # delete an address
 @app.delete("/delete_address/{address_id}", response_model=address_schemas.Address, description='remove an address from the database.')
 def delete_address(address_id: int, user_id: int, db: Session = Depends(get_db)):
-    
+
     log.info('inside delete address route')
     db_address = address_crud.get_address(address_id=address_id, db=db, user_id=user_id)
     if db_address is None:

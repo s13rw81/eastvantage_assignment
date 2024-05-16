@@ -15,8 +15,8 @@ Python | Fast API | Pydantic | SQLite3 | SQLALchemy | pytest
 - [X] create user model
 - [X] create CRUD APIs
 - [X] push to Github
-- [ ] add logging
-- [ ] add documentation
+- [X] add logging
+- [X] add documentation
 - [ ] add unit tests
 - [ ] deply to Oracle Cloud
 
